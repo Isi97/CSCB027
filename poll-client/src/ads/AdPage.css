@@ -1,0 +1,25 @@
+.ad-container {
+    max-width: 800px;
+    margin: 0 auto;    
+    margin-top: 20px;
+
+    box-shadow: 0 5px 1px 0 rgba(0,0,0,0.16), 0 0 0 0px rgba(0,0,0,0.08);
+    padding: 15px;
+}
+
+.ad-title, .ad-description
+{
+    padding-left: 10%;
+}
+
+.ad-description{
+    padding-bottom:30px;
+}
+
+.carouselImage
+{
+    width: 80%; 
+    margin:auto;
+}
+
+
