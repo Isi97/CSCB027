@@ -3,7 +3,7 @@ import './App.css';
 import {
   Route,
   withRouter,
-  Switch
+  Switch,
 } from 'react-router-dom';
 
 import { getCurrentUser } from '../util/APIUtils';
@@ -19,11 +19,14 @@ import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import PrivateRoute from '../common/PrivateRoute';
 
-import { Layout, notification } from 'antd';
+import { Layout, notification, Modal } from 'antd';
 import AdPage from "../ads/AdPage"
 import AdList from '../ads/AdList';
 import NewAd from '../ads/NewAd';
 import EditAd from '../ads/EditAd';
+
+import UserList from "../admin/UserList"
+import UserActivities from "../admin/UserActivities"
 
 const { Content } = Layout;
 
@@ -43,7 +46,7 @@ class App extends Component {
       placement: 'topRight',
       top: 70,
       duration: 3,
-    });    
+    });
   }
 
   loadCurrentUser() {
@@ -51,24 +54,34 @@ class App extends Component {
       isLoading: true
     });
     getCurrentUser()
-    .then(response => {
-      this.setState({
-        currentUser: response,
-        isAuthenticated: true,
-        isLoading: false
+      .then(response => {
+        this.setState({
+          currentUser: response,
+          isAuthenticated: true,
+          isLoading: false
+        });
+
+        if (response.authorities.includes("ROLE_BANNED")) {
+          Modal.error({
+            title: 'You have been banned',
+            content: 'You will be automatically logged out',
+          });
+
+          this.handleLogout();
+        }
+
+      }).catch(error => {
+        this.setState({
+          isLoading: false
+        });
       });
-    }).catch(error => {
-      this.setState({
-        isLoading: false
-      });  
-    });
   }
 
   componentDidMount() {
     this.loadCurrentUser();
   }
 
-  handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
+  handleLogout(redirectTo = "/", notificationType = "success", description = "You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);
 
     this.setState({
@@ -76,8 +89,9 @@ class App extends Component {
       isAuthenticated: false
     });
 
+
     this.props.history.push(redirectTo);
-    
+
     notification[notificationType]({
       message: 'Polling App',
       description: description,
@@ -94,37 +108,43 @@ class App extends Component {
   }
 
   render() {
-    if(this.state.isLoading) {
+    if (this.state.isLoading) {
       return <LoadingIndicator />
     }
     return (
-        <Layout className="app-container">
-          <AppHeader isAuthenticated={this.state.isAuthenticated} 
-            currentUser={this.state.currentUser} 
-            onLogout={this.handleLogout} />
+      <Layout className="app-container">
+        <AppHeader isAuthenticated={this.state.isAuthenticated}
+          currentUser={this.state.currentUser}
+          onLogout={this.handleLogout} />
 
-          <Content className="app-content">
-            <div className="container">
-              <Switch>      
-                <Route exact path="/" 
-                  render={(props) => <AdList isAuthenticated={this.state.isAuthenticated} 
-                      currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
-                </Route>
-                <Route exact path="/ads/view/:aid" component={AdPage} />
-                <Route exact path="/ads/edit/:adid" component={EditAd} />
-                <Route path="/login" 
-                  render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
-                <Route path="/signup" component={Signup}></Route>
-                <Route path="/users/:username" 
-                  render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
-                </Route>
-                <Route authenticated={this.state.isAuthenticated} path="/ads/new" component={NewAd} handleLogout={this.handleLogout} />
-                <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new" component={NewPoll} handleLogout={this.handleLogout}></PrivateRoute>
-                <Route component={NotFound}></Route>
-              </Switch>
-            </div>
-          </Content>
-        </Layout>
+        <Content className="app-content">
+          <div className="container">
+            <Switch>
+              <Route exact path="/"
+                render={(props) => <AdList isAuthenticated={this.state.isAuthenticated}
+                  currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
+              </Route>
+              <Route exact path="/ads/view/:aid" component={AdPage} />
+              <Route exact path="/admin"
+                render={(props) => <UserList isAuthenticated={this.state.isAuthenticated}
+                  currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
+              </Route>
+              <Route exact path="/admin/:uid" render={(props) => <UserActivities isAuthenticated={this.state.isAuthenticated}
+                currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />} />
+              <Route exact path="/ads/edit/:adid" component={EditAd} />
+              <Route path="/login"
+                render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
+              <Route path="/signup" component={Signup}></Route>
+              <Route path="/users/:username"
+                render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props} />}>
+              </Route>
+              <Route authenticated={this.state.isAuthenticated} path="/ads/new" component={NewAd} handleLogout={this.handleLogout} />
+              <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new" component={NewPoll} handleLogout={this.handleLogout}></PrivateRoute>
+              <Route component={NotFound}></Route>
+            </Switch>
+          </div>
+        </Content>
+      </Layout>
     );
   }
 }

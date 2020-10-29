@@ -3,18 +3,15 @@ package com.iispiridis.poll.Util;
 import com.iispiridis.poll.Models.Ad;
 import com.iispiridis.poll.Models.Poll;
 import com.iispiridis.poll.Models.User;
-import com.iispiridis.poll.Payload.AdResponse;
-import com.iispiridis.poll.Payload.ChoiceResponse;
-import com.iispiridis.poll.Payload.PollResponse;
-import com.iispiridis.poll.Payload.UserSummary;
+import com.iispiridis.poll.Payload.*;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ModelMapper {
-
+public class ModelMapper
+{
     public static PollResponse mapPollToPollResponse(Poll poll, Map<Long, Long> choiceVotesMap, User creator, Long userVote) {
         PollResponse pollResponse = new PollResponse();
         pollResponse.setId(poll.getId());
@@ -51,15 +48,22 @@ public class ModelMapper {
         return pollResponse;
     }
 
-    public static AdResponse mapAdResponse(Ad ad, User creator) // use please
+    public static AdResponse mapAdResponse(Ad ad, User creator, List<CommentResponse> comments, RatingResponse ratingResponse) // use please
     {
             AdResponse adResponse = new AdResponse();
+
             adResponse.setCreatedAt(ad.getCreatedAt());
             adResponse.setUser(creator);
             adResponse.setDescription(ad.getDescription());
             adResponse.setTitle(ad.getTitle());
             adResponse.setId(ad.getId());
+            adResponse.setLocation(ad.getLocation());
+            adResponse.setComments(comments);
+            adResponse.setRatings(ratingResponse);
+
+            adResponse.setCategories(ad.getCategories());
 
             return adResponse;
+
     }
 }

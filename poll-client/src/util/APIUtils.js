@@ -67,6 +67,14 @@ export function getAllAds(page, size)
     });
 }
 
+export function getAdCategories()
+{
+    return request({
+        url: API_BASE_URL + "/ads/categories",
+        method: 'GET'
+    }); 
+}
+
 export function createPoll(pollData) {
     return request({
         url: API_BASE_URL + "/polls",
@@ -139,6 +147,27 @@ export function getAd(id) {
     });
 }
 
+export function deleteAd(id) {
+    return request({
+        url: API_BASE_URL + "/ads/" + id,
+        method: 'DELETE'
+    });
+}
+
+export function deleteComment(id) {
+    return request({
+        url: API_BASE_URL + "/comments/" + id,
+        method: 'DELETE'
+    });
+}
+
+export function deleteRating(id) {
+    return request({
+        url: API_BASE_URL + "/ratings/" + id,
+        method: 'DELETE'
+    });
+}
+
 export function getUserCreatedPolls(username, page, size) {
     page = page || 0;
     size = size || POLL_LIST_SIZE;
@@ -155,6 +184,16 @@ export function getUserVotedPolls(username, page, size) {
 
     return request({
         url: API_BASE_URL + "/users/" + username + "/votes?page=" + page + "&size=" + size,
+        method: 'GET'
+    });
+}
+
+export function searchAdsByCategory(page, size, categories) {
+    page = page || 0;
+    size = size || POLL_LIST_SIZE;
+
+    return request({
+        url: API_BASE_URL + "/ads/search?page=" + page + "&size=" + size +"&categories=" +categories,
         method: 'GET'
     });
 }
@@ -211,5 +250,80 @@ export function postAd(adinfo)
         url: API_BASE_URL + "/ads",
         method: 'POST',
         body: JSON.stringify(adinfo)
+    });
+}
+
+export function updateAd(adinfo)
+{
+    return request({
+        url: API_BASE_URL + "/ads",
+        method: 'PUT',
+        body: JSON.stringify(adinfo)
+    });
+}
+
+export function postComment(commentRequest)
+{
+    return request({
+        url: API_BASE_URL + "/comments",
+        method: 'POST',
+        body: JSON.stringify(commentRequest)
+    });
+}
+
+export function getAdComments(adId)
+{
+    return request({
+        url: API_BASE_URL + "/comments/ad/" + adId,
+        method: 'GET',
+    });
+}
+
+export function postRating(ratingRequest)
+{
+    return request({
+        url: API_BASE_URL + "/ratings",
+        method: 'POST',
+        body: JSON.stringify(ratingRequest)
+    });
+}
+
+export function getAllUsers()
+{
+    return request({
+        url: API_BASE_URL + "/users/all/",
+        method: 'GET',
+    });
+}
+
+export function getUserActivities(uid)
+{
+    return request({
+        url: API_BASE_URL + "/user/"+uid+"/activities",
+        method: 'GET',
+    });
+}
+
+export function banUser(id)
+{
+    return request({
+        url: API_BASE_URL + "/user/"+id+"/ban",
+        method: 'POST',
+    });
+}
+
+export function unbanUser(id)
+{
+    return request({
+        url: API_BASE_URL + "/user/"+id+"/unban",
+        method: 'POST',
+    });
+}
+
+export function promoteUser(id)
+{
+    return request({
+        url: API_BASE_URL + "/user/"+id+"/promote",
+        method: 'POST',
     });
 }
