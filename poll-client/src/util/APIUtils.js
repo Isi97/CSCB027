@@ -46,16 +46,6 @@ const multiPartRequest = (options) => {
     );
 };
 
-export function getAllPolls(page, size) {
-    page = page || 0;
-    size = size || POLL_LIST_SIZE;
-
-    return request({
-        url: API_BASE_URL + "/polls?page=" + page + "&size=" + size,
-        method: 'GET'
-    });
-}
-
 export function getAllAds(page, size)
 {
     page = page || 0;
@@ -75,21 +65,6 @@ export function getAdCategories()
     }); 
 }
 
-export function createPoll(pollData) {
-    return request({
-        url: API_BASE_URL + "/polls",
-        method: 'POST',
-        body: JSON.stringify(pollData)         
-    });
-}
-
-export function castVote(voteData) {
-    return request({
-        url: API_BASE_URL + "/polls/" + voteData.pollId + "/votes",
-        method: 'POST',
-        body: JSON.stringify(voteData)
-    });
-}
 
 export function login(loginRequest) {
     return request({
@@ -165,26 +140,6 @@ export function deleteRating(id) {
     return request({
         url: API_BASE_URL + "/ratings/" + id,
         method: 'DELETE'
-    });
-}
-
-export function getUserCreatedPolls(username, page, size) {
-    page = page || 0;
-    size = size || POLL_LIST_SIZE;
-
-    return request({
-        url: API_BASE_URL + "/users/" + username + "/polls?page=" + page + "&size=" + size,
-        method: 'GET'
-    });
-}
-
-export function getUserVotedPolls(username, page, size) {
-    page = page || 0;
-    size = size || POLL_LIST_SIZE;
-
-    return request({
-        url: API_BASE_URL + "/users/" + username + "/votes?page=" + page + "&size=" + size,
-        method: 'GET'
     });
 }
 

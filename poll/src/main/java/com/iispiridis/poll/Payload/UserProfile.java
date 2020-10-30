@@ -9,18 +9,16 @@ public class UserProfile {
     private String username;
     private String name;
     private Instant joinedAt;
-    private Long pollCount;
-    private Long voteCount;
+
     private ContactInformation contactInformation;
 
 
-    public UserProfile(Long id, String username, String name, Instant joinedAt, Long pollCount, Long voteCount, ContactInformation contactInformation) {
+    public UserProfile(Long id, String username, String name, Instant joinedAt, ContactInformation contactInformation) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.joinedAt = joinedAt;
-        this.pollCount = pollCount;
-        this.voteCount = voteCount;
+
         this.contactInformation = contactInformation;
     }
 
@@ -62,21 +60,5 @@ public class UserProfile {
 
     public void setJoinedAt(Instant joinedAt) {
         this.joinedAt = joinedAt;
-    }
-
-    public Long getPollCount() {
-        return pollCount;
-    }
-
-    public void setPollCount(Long pollCount) {
-        this.pollCount = pollCount;
-    }
-
-    public Long getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(Long voteCount) {
-        this.voteCount = voteCount;
     }
 }

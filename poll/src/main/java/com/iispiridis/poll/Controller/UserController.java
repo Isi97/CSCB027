@@ -6,14 +6,11 @@ import com.iispiridis.poll.Models.Role;
 import com.iispiridis.poll.Models.RoleName;
 import com.iispiridis.poll.Models.User;
 import com.iispiridis.poll.Payload.*;
-import com.iispiridis.poll.Repositories.PollRepository;
 import com.iispiridis.poll.Repositories.RoleRepository;
 import com.iispiridis.poll.Repositories.UserRepository;
-import com.iispiridis.poll.Repositories.VoteRepository;
 import com.iispiridis.poll.Security.CurrentUser;
 import com.iispiridis.poll.Security.UserPrincipal;
 import com.iispiridis.poll.Service.AdminService;
-import com.iispiridis.poll.Service.PollService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +30,6 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private PollRepository pollRepository;
-
-    @Autowired
-    private VoteRepository voteRepository;
-
-    @Autowired
-    private PollService pollService;
 
     @Autowired
     private AdminService adminService;
@@ -93,10 +81,8 @@ public class UserController {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 
-        long pollCount = pollRepository.countByCreatedBy(user.getId());
-        long voteCount = voteRepository.countByUserId(user.getId());
 
-        UserProfile userProfile = new UserProfile(user.getId(), user.getUsername(), user.getName(), user.getCreatedAt(), pollCount, voteCount, user.getContactInformation());
+        UserProfile userProfile = new UserProfile(user.getId(), user.getUsername(), user.getName(), user.getCreatedAt(), user.getContactInformation());
 
         return userProfile;
     }

@@ -9,8 +9,6 @@ import {
 import { getCurrentUser } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
 
-import PollList from '../poll/PollList';
-import NewPoll from '../poll/NewPoll';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
@@ -139,7 +137,6 @@ class App extends Component {
                 render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props} />}>
               </Route>
               <Route authenticated={this.state.isAuthenticated} path="/ads/new" component={NewAd} handleLogout={this.handleLogout} />
-              <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new" component={NewPoll} handleLogout={this.handleLogout}></PrivateRoute>
               <Route component={NotFound}></Route>
             </Switch>
           </div>

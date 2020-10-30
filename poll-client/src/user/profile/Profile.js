@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PollList from '../../poll/PollList';
 import { getUserProfile, updateContactInformation } from '../../util/APIUtils';
 import { Form, Input, Button, Avatar, Tabs, notification, Col, Row } from 'antd';
 import { getAvatarColor } from '../../util/Colors';
@@ -8,8 +7,6 @@ import LoadingIndicator from '../../common/LoadingIndicator';
 import './Profile.css';
 import NotFound from '../../common/NotFound';
 import ServerError from '../../common/ServerError';
-import UploadForm from "../../util/FUpload";
-import ImageFromBlob from "../../general/ImageFromBlob"
 import AdList from '../../ads/AdList';
 
 const TabPane = Tabs.TabPane;
